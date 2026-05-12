@@ -923,39 +923,130 @@
       <h2>Prompt 範本庫</h2>
     </div>
 
-    <p style="font-size:14px; color:var(--gray-600); margin-bottom:20px;">
-      以下模板可以直接複製。<span style="color:var(--warning); font-weight:600;">黃色文字</span>為佔位符，使用前替換成你的實際資料。
+    <p style="font-size:14px; color:var(--gray-600); margin-bottom:4px;">
+      以下模板按<strong>試驗計劃的順序</strong>排列，跟著步驟一張一張用。<span style="color:var(--warning); font-weight:600;">黃色文字</span>為佔位符，使用前替換成你的實際資料。
+    </p>
+    <p style="font-size:13px; color:var(--gray-600); margin-bottom:24px;">
+      → 還不熟悉試驗計劃？先看 <a href="#part6" style="color:var(--primary);">第 6 部分</a>。
     </p>
 
-    <h3 style="font-size:15px; font-weight:600; margin:24px 0 12px;">📋 模板一A：從入數紙圖像提取資料（第一步）</h3>
-    <div class="prompt-block">
+    <!-- ── 入數紙 Flow 標題 ── -->
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px; padding-bottom:10px; border-bottom:2px solid var(--primary-light);">
+      <span style="font-size:20px;">🏦</span>
+      <h3 style="font-size:17px; font-weight:700; color:var(--primary);">入數紙 Flow — 跟著試驗計劃一步步做</h3>
+    </div>
+
+    <!-- Step 1 -->
+    <div style="display:flex; align-items:flex-start; gap:14px; margin-bottom:6px;">
+      <div style="background:var(--primary); color:#fff; border-radius:20px; padding:3px 12px; font-size:11px; font-weight:700; white-space:nowrap; margin-top:2px;">第一輪</div>
+      <div style="flex:1;">
+        <h3 style="font-size:15px; font-weight:700; margin-bottom:2px;">Step 1：單張提取</h3>
+        <p style="font-size:12px; color:var(--gray-600); margin-bottom:10px;">每次只上傳 <strong>1 張</strong>入數紙，用這個 Prompt 提取。目標是看 AI 在不同圖像上的表現，不是做完所有工作。</p>
+      </div>
+    </div>
+    <div class="prompt-block" style="margin-bottom:8px;">
       <div class="prompt-block-header">
-        <span class="title">入數紙提取（上傳圖像後使用）</span>
+        <span class="title">單張提取（第一輪用）</span>
         <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
       </div>
-      <pre>我已上傳了 <span class="placeholder">[張數]</span> 張學生提交的入數紙（PDF / 圖像截圖）。
+      <pre>我上傳了一張學生提交的入數紙（PDF / 圖像）。
 
-請從每張入數紙中提取以下資訊，整理成表格：
-- 序號（按圖像順序）
+請提取以下資訊：
 - 存款日期（格式：DD/MM/YYYY）
 - 存款金額（港元，保留兩位小數）
 - 銀行參考號 / 交易編號（如有）
-- 備注（如有特別說明）
 
 如某欄位不清晰或無法辨認，請填「?」並說明原因。
 請勿自行猜測或補全任何數字。</pre>
     </div>
+    <div style="background:var(--gray-100); border-radius:8px; padding:12px 14px; margin-bottom:28px; font-size:13px; color:var(--gray-600);">
+      ➡️ <strong>用完之後：</strong>對照正確答案表，填好記錄表（日期對？金額對？參考號對？），帶去 Review Session。
+    </div>
 
-    <h3 style="font-size:15px; font-weight:600; margin:24px 0 12px;">📋 模板一B：核對提取結果與帳目（第二步）</h3>
-    <div class="prompt-block">
+    <!-- Step 2 -->
+    <div style="display:flex; align-items:flex-start; gap:14px; margin-bottom:6px;">
+      <div style="background:#0369a1; color:#fff; border-radius:20px; padding:3px 12px; font-size:11px; font-weight:700; white-space:nowrap; margin-top:2px;">第二輪</div>
+      <div style="flex:1;">
+        <h3 style="font-size:15px; font-weight:700; margin-bottom:2px;">Step 2：加強版提取（Review Session 後修改）</h3>
+        <p style="font-size:12px; color:var(--gray-600); margin-bottom:10px;">把 Review Session 討論出來的問題修正，加入黃色佔位符位置，再重試第一輪出錯的 case，看看有沒有改善。</p>
+      </div>
+    </div>
+    <div class="prompt-block" style="margin-bottom:8px;">
       <div class="prompt-block-header">
-        <span class="title">入數紙對帳（提取完成後使用）</span>
+        <span class="title">加強版提取（第二輪用，按問題填入修正）</span>
         <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
       </div>
-      <pre>以下是你剛才提取的入數紙記錄，以及我的 Excel 帳目記錄，請幫我核對兩份資料的差異。
+      <pre>我上傳了一張學生提交的入數紙（PDF / 圖像）。
 
-【入數紙提取結果】
-<span class="placeholder">（直接引用上一步 AI 輸出的表格，或貼上修正後的版本）</span>
+背景說明：
+- 這是香港銀行的入數紙，日期格式為 DD/MM/YYYY
+- 存款金額在「存款金額 / Deposit Amount」欄位，請勿提取手續費
+<span class="placeholder">[根據 Review Session 加入其他說明，例如：
+- 這是恆生銀行格式，參考號在右上角
+- 如有多個金額欄，只取最大的那個]</span>
+
+請提取以下資訊：
+- 存款日期（格式：DD/MM/YYYY）
+- 存款金額（港元，保留兩位小數）
+- 銀行參考號 / 交易編號（如有）
+
+如某欄位不清晰或無法辨認，請填「?」並說明原因。
+請勿自行猜測或補全任何數字。</pre>
+    </div>
+    <div style="background:var(--gray-100); border-radius:8px; padding:12px 14px; margin-bottom:28px; font-size:13px; color:var(--gray-600);">
+      ➡️ <strong>用完之後：</strong>比較第一輪的失敗 case，有沒有修好？記錄哪個修正有效、哪個沒效。
+    </div>
+
+    <!-- Step 3 -->
+    <div style="display:flex; align-items:flex-start; gap:14px; margin-bottom:6px;">
+      <div style="background:#0369a1; color:#fff; border-radius:20px; padding:3px 12px; font-size:11px; font-weight:700; white-space:nowrap; margin-top:2px;">第二輪</div>
+      <div style="flex:1;">
+        <h3 style="font-size:15px; font-weight:700; margin-bottom:2px;">Step 3：批量提取（3–5 張）</h3>
+        <p style="font-size:12px; color:var(--gray-600); margin-bottom:10px;">加強版確認有效後，才測試批量。一次上傳 3–5 張，留意 AI 有沒有搞亂哪張是哪張。</p>
+      </div>
+    </div>
+    <div class="prompt-block" style="margin-bottom:8px;">
+      <div class="prompt-block-header">
+        <span class="title">批量提取（第二輪，3–5張）</span>
+        <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
+      </div>
+      <pre>我已上傳了 <span class="placeholder">[張數，建議 3–5]</span> 張學生提交的入數紙。
+
+背景說明：
+- 這是香港銀行的入數紙，日期格式為 DD/MM/YYYY
+- 存款金額在「存款金額 / Deposit Amount」欄位，請勿提取手續費
+<span class="placeholder">[貼入 Step 2 中有效的修正說明]</span>
+
+請從每張入數紙依序提取，整理成一份表格：
+- 序號（按上傳順序）
+- 存款日期（格式：DD/MM/YYYY）
+- 存款金額（港元，保留兩位小數）
+- 銀行參考號 / 交易編號（如有）
+
+如某欄位不清晰或無法辨認，請填「?」並說明原因。
+請勿自行猜測或補全任何數字。</pre>
+    </div>
+    <div style="background:var(--gray-100); border-radius:8px; padding:12px 14px; margin-bottom:28px; font-size:13px; color:var(--gray-600);">
+      ➡️ <strong>用完之後：</strong>逐張核對 AI 有沒有混淆不同入數紙的資料。確認無誤後才進入 Step 4 對帳。
+    </div>
+
+    <!-- Step 4 -->
+    <div style="display:flex; align-items:flex-start; gap:14px; margin-bottom:6px;">
+      <div style="background:var(--success); color:#fff; border-radius:20px; padding:3px 12px; font-size:11px; font-weight:700; white-space:nowrap; margin-top:2px;">第三輪</div>
+      <div style="flex:1;">
+        <h3 style="font-size:15px; font-weight:700; margin-bottom:2px;">Step 4：對帳</h3>
+        <p style="font-size:12px; color:var(--gray-600); margin-bottom:10px;">提取結果人工確認無誤後，才用這個 Prompt 做對帳。記得計時——這是評估「值不值得用」的關鍵數據。</p>
+      </div>
+    </div>
+    <div class="prompt-block" style="margin-bottom:8px;">
+      <div class="prompt-block-header">
+        <span class="title">對帳（第三輪用）</span>
+        <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
+      </div>
+      <pre>以下是已確認的入數紙提取記錄，以及 Excel 帳目記錄，請幫我核對兩份資料的差異。
+
+【入數紙提取結果（已人工確認）】
+<span class="placeholder">（貼上 Step 3 輸出、經你核對後的表格）</span>
 
 【Excel 帳目記錄】
 <span class="placeholder">[貼上 Excel 對應期間的記錄，例如：
@@ -965,13 +1056,22 @@
 請按以下格式輸出對帳結果：
 1. ✅ 已配對（日期 + 金額完全一致）
 2. ❌ 金額差異（列出兩方金額及差額）
-3. ⚠️ 無法配對（只在其中一方出現，請列出是哪一方）
+3. ⚠️ 無法配對（只在其中一方出現，請列明是哪一方）
 
 最後列出總結：共幾筆配對、幾筆有差異、幾筆無法配對。</pre>
     </div>
+    <div style="background:var(--success-light); border-radius:8px; padding:12px 14px; margin-bottom:40px; font-size:13px; color:var(--success);">
+      ✅ <strong>完成後：</strong>記錄總用時，填入 Part 6 第三輪的計時表，評估是否達到 Go 標準。
+    </div>
 
-    <h3 style="font-size:15px; font-weight:600; margin:24px 0 12px;">🧾 模板二：PDF 發票資料提取</h3>
-    <div class="prompt-block">
+    <!-- ── 其他工具模板 ── -->
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px; padding-bottom:10px; border-bottom:2px solid var(--gray-200);">
+      <span style="font-size:20px;">🧰</span>
+      <h3 style="font-size:17px; font-weight:700; color:var(--gray-800);">其他工具模板</h3>
+    </div>
+
+    <h3 style="font-size:14px; font-weight:600; margin:0 0 10px; color:var(--gray-600);">🧾 PDF 發票資料提取</h3>
+    <div class="prompt-block" style="margin-bottom:24px;">
       <div class="prompt-block-header">
         <span class="title">PDF 發票提取</span>
         <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
@@ -993,28 +1093,8 @@
 如有任何欄位不清晰或無法確認，請在該格填「?」並說明原因。</pre>
     </div>
 
-    <h3 style="font-size:15px; font-weight:600; margin:24px 0 12px;">📄 模板三：批量收據整理</h3>
-    <div class="prompt-block">
-      <div class="prompt-block-header">
-        <span class="title">批量收據整理</span>
-        <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
-      </div>
-      <pre>以下是 <span class="placeholder">[數量]</span> 張收據的資料，請整理成一份表格。
-
-【收據資料】
-<span class="placeholder">[逐一貼上每張收據的文字，用「---」分隔]</span>
-
----
-
-請輸出 CSV 格式的表格，欄位如下：
-序號 | 日期 | 供應商 | 金額(HKD) | 類別 | 備注
-
-日期格式統一為 DD/MM/YYYY。
-如某張收據有資訊缺失，對應格填「-」。</pre>
-    </div>
-
-    <h3 style="font-size:15px; font-weight:600; margin:24px 0 12px;">✉️ 模板四：草擬跟進電郵</h3>
-    <div class="prompt-block">
+    <h3 style="font-size:14px; font-weight:600; margin:0 0 10px; color:var(--gray-600);">✉️ 草擬跟進電郵</h3>
+    <div class="prompt-block" style="margin-bottom:24px;">
       <div class="prompt-block-header">
         <span class="title">草擬跟進電郵</span>
         <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
@@ -1032,8 +1112,8 @@
 收件人稱呼：<span class="placeholder">[對方姓名/稱謂]</span></pre>
     </div>
 
-    <h3 style="font-size:15px; font-weight:600; margin:24px 0 12px;">📊 模板五：Excel 公式協助</h3>
-    <div class="prompt-block">
+    <h3 style="font-size:14px; font-weight:600; margin:0 0 10px; color:var(--gray-600);">📊 Excel 公式協助</h3>
+    <div class="prompt-block" style="margin-bottom:0;">
       <div class="prompt-block-header">
         <span class="title">Excel 公式協助</span>
         <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
