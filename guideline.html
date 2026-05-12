@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoClaw 上手指南 — 會計部</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #dbeafe;
+      --accent: #0ea5e9;
+      --success: #16a34a;
+      --success-light: #dcfce7;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --danger: #dc2626;
+      --danger-light: #fee2e2;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-600: #4b5563;
+      --gray-800: #1f2937;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "PingFang HK", "Noto Sans HK", "Microsoft JhengHei", Arial, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      line-height: 1.7;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, #1e40af 0%, #0369a1 100%);
+      color: #fff;
+      padding: 40px 24px 32px;
+      text-align: center;
+    }
+    header .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 20px;
+      font-size: 12px;
+      padding: 3px 12px;
+      margin-bottom: 14px;
+      letter-spacing: 1px;
+    }
+    header h1 { font-size: clamp(22px, 4vw, 34px); font-weight: 700; margin-bottom: 8px; }
+    header p  { font-size: 15px; opacity: .85; }
+
+    /* ── Nav ── */
+    nav {
+      background: #fff;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    nav ul { display: inline-flex; list-style: none; gap: 0; }
+    nav li a {
+      display: block;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--gray-600);
+      text-decoration: none;
+      border-bottom: 3px solid transparent;
+      transition: all .15s;
+    }
+    nav li a:hover { color: var(--primary); border-bottom-color: var(--primary-light); }
+
+    /* ── Layout ── */
+    .container { max-width: 860px; margin: 0 auto; padding: 40px 20px 80px; }
+
+    section { margin-bottom: 56px; }
+
+    /* ── Section title ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .section-num {
+      width: 34px; height: 34px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .section-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gray-800);
+    }
+
+    /* ── Card ── */
+    .card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      margin-bottom: 16px;
+    }
+    .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+
+    /* ── Info boxes ── */
+    .info-box {
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 12px;
+    }
+    .info-box .icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .info-box.blue   { background: var(--primary-light); border-left: 4px solid var(--primary); }
+    .info-box.green  { background: var(--success-light); border-left: 4px solid var(--success); }
+    .info-box.yellow { background: var(--warning-light); border-left: 4px solid var(--warning); }
+    .info-box.red    { background: var(--danger-light);  border-left: 4px solid var(--danger); }
+    .info-box p { font-size: 14px; }
+    .info-box strong { display: block; margin-bottom: 4px; }
+
+    /* ── Steps ── */
+    .steps { display: flex; flex-direction: column; gap: 0; }
+    .step {
+      display: flex;
+      gap: 16px;
+      position: relative;
+    }
+    .step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 17px; top: 40px;
+      width: 2px; bottom: 0;
+      background: var(--gray-200);
+    }
+    .step-circle {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700;
+      flex-shrink: 0;
+      position: relative; z-index: 1;
+    }
+    .step-body {
+      flex: 1;
+      padding-bottom: 28px;
+    }
+    .step-body h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; margin-top: 6px; }
+    .step-body p, .step-body li { font-size: 14px; color: var(--gray-600); }
+    .step-body ul { padding-left: 18px; margin-top: 6px; }
+    .step-body li { margin-bottom: 3px; }
+
+    /* ── Good / Bad comparison ── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 600px) { .compare-grid { grid-template-columns: 1fr; } }
+    .compare-card {
+      border-radius: var(--radius);
+      padding: 16px;
+      font-size: 13px;
+    }
+    .compare-card.good { background: var(--success-light); border: 1px solid #86efac; }
+    .compare-card.bad  { background: var(--danger-light);  border: 1px solid #fca5a5; }
+    .compare-card .label {
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: .5px;
+      margin-bottom: 8px;
+    }
+    .compare-card.good .label { color: var(--success); }
+    .compare-card.bad  .label { color: var(--danger); }
+    .compare-card .example {
+      background: rgba(255,255,255,0.7);
+      border-radius: 6px;
+      padding: 10px 12px;
+      line-height: 1.5;
+      font-family: monospace;
+      font-size: 12.5px;
+      margin-bottom: 8px;
+    }
+    .compare-card .reason { color: var(--gray-600); font-size: 12px; }
+
+    /* ── Prompt template ── */
+    .prompt-block {
+      background: #1e293b;
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .prompt-block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      background: #0f172a;
+    }
+    .prompt-block-header .title {
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .5px;
+    }
+    .copy-btn {
+      background: #334155;
+      color: #cbd5e1;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .copy-btn:hover { background: #475569; color: #fff; }
+    .copy-btn.copied { background: #166534; color: #bbf7d0; }
+    .prompt-block pre {
+      color: #e2e8f0;
+      padding: 18px;
+      font-size: 13px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+      overflow-x: auto;
+    }
+    .prompt-block pre .placeholder {
+      color: #fbbf24;
+      font-style: italic;
+    }
+
+    /* ── Principles grid ── */
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .principle-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 18px;
+      text-align: center;
+    }
+    .principle-card .icon { font-size: 28px; display: block; margin-bottom: 8px; }
+    .principle-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .principle-card p { font-size: 12px; color: var(--gray-600); }
+
+    /* ── FAQ accordion ── */
+    .faq-item {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      padding: 16px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--gray-800);
+    }
+    .faq-q .arrow { transition: transform .2s; }
+    .faq-item.open .faq-q .arrow { transform: rotate(90deg); }
+    .faq-a {
+      display: none;
+      padding: 0 18px 16px;
+      font-size: 14px;
+      color: var(--gray-600);
+      line-height: 1.7;
+    }
+    .faq-item.open .faq-a { display: block; }
+
+    /* ── Tag pills ── */
+    .tag {
+      display: inline-block;
+      border-radius: 20px;
+      padding: 2px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-right: 6px;
+      margin-bottom: 4px;
+    }
+    .tag.green { background: var(--success-light); color: var(--success); }
+    .tag.red   { background: var(--danger-light);  color: var(--danger); }
+
+    /* ── Table ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: #fff;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+      margin-bottom: 16px;
+    }
+    th {
+      background: var(--gray-100);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--gray-600);
+      border-bottom: 1px solid var(--gray-200);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--gray-200);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+
+    /* ── Divider ── */
+    hr { border: none; border-top: 1px solid var(--gray-200); margin: 32px 0; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: var(--gray-400);
+      border-top: 1px solid var(--gray-200);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="badge">會計部 內部文件</div>
+  <h1>🦞 AutoClaw 上手指南</h1>
+  <p>從安裝到實際工作流程，一步一步帶你入門</p>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#part1">認識 AutoClaw</a></li>
+    <li><a href="#part2">安裝設定</a></li>
+    <li><a href="#part3">對話技巧</a></li>
+    <li><a href="#part4">入數紙對帳</a></li>
+    <li><a href="#part5">PDF 發票提取</a></li>
+    <li><a href="#part6">試驗計劃</a></li>
+    <li><a href="#part7">Prompt 範本庫</a></li>
+    <li><a href="#part8">常見問題</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+  <!-- ══════════════════════════════════════ PART 1 ══════════════════════════════════════ -->
+  <section id="part1">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>認識 AutoClaw</h2>
+    </div>
+
+    <div class="card">
+      <h3>什麼是 AutoClaw？</h3>
+      <p style="font-size:14px; color:var(--gray-600);">
+        AutoClaw 是由中國 AI 公司 <strong>智譜 AI（Zhipu AI）</strong> 開發的桌面版 AI 助手。你可以把它想像成一個裝在電腦裡的智能同事——用對話方式交代任務，它會幫你處理文件、提取資料、整理資訊。
+      </p>
+      <p style="font-size:14px; color:var(--gray-600); margin-top:10px;">
+        底層使用 AI 語言模型，內建 50 多種技能，支援閱讀 PDF、操作 Excel、瀏覽器自動化等。
+      </p>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-bottom:16px;">
+      <div class="card">
+        <h3>✅ AutoClaw 能幫你做什麼</h3>
+        <ul style="font-size:13px; color:var(--gray-600); padding-left:18px; margin-top:8px;">
+          <li>從 PDF 發票、收據中提取關鍵資訊</li>
+          <li>協助核對入數紙與 Excel 記錄</li>
+          <li>整理、格式化數據成指定欄位</li>
+          <li>草擬電郵、報告、備忘錄</li>
+          <li>解釋會計科目或術語</li>
+          <li>協助建立 Excel 公式</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>❌ AutoClaw 不適合做什麼</h3>
+        <ul style="font-size:13px; color:var(--gray-600); padding-left:18px; margin-top:8px;">
+          <li>替代你的專業判斷和最終審核</li>
+          <li>直接提交或存入公司系統</li>
+          <li>100% 保證數字正確（需人工核對）</li>
+          <li>處理高度機密的客戶資料</li>
+          <li>實時存取公司資料庫或 ERP</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-box blue">
+      <div class="icon">💡</div>
+      <div>
+        <strong>黃金法則</strong>
+        <p>AutoClaw 是你的助手，不是替代者。它幫你節省重複性工作時間，但最終結果由你負責核對和確認。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ PART 2 ══════════════════════════════════════ -->
+  <section id="part2">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2>環境 Setup（每人自己的電腦）</h2>
+    </div>
+
+    <div class="info-box yellow">
+      <div class="icon">⚠️</div>
+      <div>
+        <strong>開始前確認</strong>
+        <p>需要 Windows 10 或以上版本（或 macOS 12+）、穩定網絡連接。首次安裝約需 5 分鐘。</p>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-circle">1</div>
+        <div class="step-body">
+          <h4>下載安裝包</h4>
+          <p>前往 AutoClaw 官網下載：<a href="https://autoglm.z.ai/autoclaw" target="_blank" style="color:var(--primary); font-weight:600;">autoglm.z.ai/autoclaw</a>，選擇你的系統版本：</p>
+          <ul>
+            <li>Windows → 下載 <strong>.exe</strong> 安裝包</li>
+            <li>macOS → 下載 <strong>.dmg</strong> 安裝包</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-circle">2</div>
+        <div class="step-body">
+          <h4>雙擊安裝</h4>
+          <p>雙擊下載的安裝包，按照預設設定一路點「下一步」即可。</p>
+          <ul>
+            <li>無需手動配置環境</li>
+            <li>全程約 1–2 分鐘</li>
+            <li>如 Windows Defender 彈出警告，點「仍要執行」</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-circle">3</div>
+        <div class="step-body">
+          <h4>建立帳戶 / 登入</h4>
+          <p>安裝完成後開啟 AutoClaw，用智譜 AI 帳戶登入：</p>
+          <ul>
+            <li>首次使用：點「注冊」，用電郵建立帳戶</li>
+            <li>已有帳戶：直接用電郵和密碼登入</li>
+            <li>新帳戶可獲 <strong>2,000 免費積分</strong>（可先免費試用）</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-circle">4</div>
+        <div class="step-body">
+          <h4>確認能正常對話</h4>
+          <p>登入後，在對話框輸入一句話測試：</p>
+          <div style="background:var(--gray-100); border-radius:8px; padding:12px 14px; margin-top:8px; font-size:13px; font-family:monospace;">
+            你好，請幫我寫一句「歡迎使用 AutoClaw」
+          </div>
+          <p style="margin-top:8px;">如果 AutoClaw 有正常回應，代表設定成功 ✅</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box green">
+      <div class="icon">✅</div>
+      <div>
+        <strong>設定完成！</strong>
+        <p>遇到問題？截圖給部門負責人，或參考第 7 部分常見問題。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ PART 3 ══════════════════════════════════════ -->
+  <section id="part3">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2>對話技巧：怎麼跟 AutoClaw 溝通最有效</h2>
+    </div>
+
+    <div class="principles">
+      <div class="principle-card">
+        <span class="icon">🎯</span>
+        <h4>清楚說明目的</h4>
+        <p>告訴 AI 你想要什麼最終結果</p>
+      </div>
+      <div class="principle-card">
+        <span class="icon">📋</span>
+        <h4>提供具體資料</h4>
+        <p>貼上樣本數據、欄位名稱</p>
+      </div>
+      <div class="principle-card">
+        <span class="icon">📐</span>
+        <h4>指定輸出格式</h4>
+        <p>說明要表格、列表還是文字</p>
+      </div>
+      <div class="principle-card">
+        <span class="icon">🔢</span>
+        <h4>一次一個任務</h4>
+        <p>不要把太多要求堆在一句話</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:15px; font-weight:600; margin-bottom:14px;">好的 Prompt vs 不好的 Prompt</h3>
+
+    <div class="compare-grid">
+      <div class="compare-card bad">
+        <div class="label">❌ 不好的問法</div>
+        <div class="example">幫我查發票</div>
+        <div class="reason">太模糊：沒有說哪張發票、要查什麼、輸出什麼格式</div>
+      </div>
+      <div class="compare-card good">
+        <div class="label">✅ 好的問法</div>
+        <div class="example">以下是一張發票的文字內容，請提取：供應商名稱、發票號碼、發票日期、總金額，並以表格呈現。<br><br>[貼上發票文字]</div>
+        <div class="reason">清楚說明：資料來源、要提取的欄位、輸出格式</div>
+      </div>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card bad">
+        <div class="label">❌ 不好的問法</div>
+        <div class="example">幫我做對帳，還有整理發票，另外寫一封電郵</div>
+        <div class="reason">三件事混在一起，AI 容易搞亂優先順序，結果不準確</div>
+      </div>
+      <div class="compare-card good">
+        <div class="label">✅ 好的問法</div>
+        <div class="example">【任務一】先幫我做入數紙對帳：<br>[貼上資料]<br><br>（對帳做完，再問任務二）</div>
+        <div class="reason">每次一個任務，結果更準確，也更容易核對</div>
+      </div>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card bad">
+        <div class="label">❌ 不好的問法</div>
+        <div class="example">這個對嗎？</div>
+        <div class="reason">AI 不知道你在問什麼「這個」</div>
+      </div>
+      <div class="compare-card good">
+        <div class="label">✅ 好的問法</div>
+        <div class="example">你剛才提取的發票日期「2024-01-05」，是否與原文「5/1/2024」一致？</div>
+        <div class="reason">具體指出哪個數據，AI 能準確核對</div>
+      </div>
+    </div>
+
+    <div class="info-box blue">
+      <div class="icon">💬</div>
+      <div>
+        <strong>記住：可以叫 AI 重試</strong>
+        <p>如果結果不對，不要只說「錯了」——說明哪裡錯、期望是什麼，AI 會根據你的反饋重新處理。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ PART 4 ══════════════════════════════════════ -->
+  <section id="part4">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2>工作流程：入數紙對帳</h2>
+    </div>
+
+    <div class="info-box yellow">
+      <div class="icon">📌</div>
+      <div>
+        <strong>適用場景</strong>
+        <p>學生提交了入數紙的 PDF 或 JPG 截圖，你需要從圖像中提取存款資料，再與 Excel 帳目核對，找出差異項目。</p>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-circle">1</div>
+        <div class="step-body">
+          <h4>收集學生提交的入數紙</h4>
+          <p>確認收到的檔案格式可以使用：</p>
+          <ul>
+            <li><strong>可用格式</strong>：PDF、JPG、PNG、截圖</li>
+            <li>圖像需清晰可讀，關鍵數字（日期、金額、參考號）不能模糊</li>
+            <li>一次可以處理多張，但建議每次不超過 5 張，避免出錯</li>
+          </ul>
+          <div class="info-box red" style="margin-top:10px;">
+            <div class="icon">🔒</div>
+            <div><strong>私隱提示</strong><p>如入數紙上有學生姓名或帳號，只需核對金額和日期，不要把帳號資訊額外記錄或轉發。</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-circle">2</div>
+        <div class="step-body">
+          <h4>上傳入數紙並提取資料</h4>
+          <p>在 AutoClaw 對話框中上傳入數紙圖像，使用模板一（第一步：提取）指示 AI 從圖像讀取資訊。</p>
+          <ul>
+            <li>點擊對話框的 <strong>📎 附件</strong> 按鈕上傳 PDF 或圖像</li>
+            <li>貼入模板一的「提取」部分 Prompt</li>
+            <li>AI 會從圖像識別：存款日期、金額、銀行參考號</li>
+          </ul>
+          <div class="info-box blue" style="margin-top:10px;">
+            <div class="icon">💡</div>
+            <div><p>如圖像有多張入數紙，可一次全部上傳，讓 AI 逐一提取並整理成表格。</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-circle">3</div>
+        <div class="step-body">
+          <h4>核對提取結果是否準確</h4>
+          <p>AI 提取完成後，先對照原始圖像快速核對一遍，才進行下一步對帳：</p>
+          <ul>
+            <li>確認每筆記錄的日期和金額與圖像一致</li>
+            <li>如 AI 對某欄位不確定，會標注「?」——這些必須人工確認</li>
+            <li>發現錯誤？告訴 AI：「第 2 筆的金額應為 $X，請修正後重新輸出」</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-circle">4</div>
+        <div class="step-body">
+          <h4>與 Excel 帳目對帳</h4>
+          <p>提取結果確認後，把你的 Excel 帳目記錄貼入，使用模板一的「對帳」部分：</p>
+          <ul>
+            <li>AutoClaw 會逐筆比對，列出：已配對 ✅、金額差異 ❌、無法配對 ⚠️</li>
+            <li>差異項目需要你親自核對原始入數紙</li>
+            <li>全部確認後，才更新正式帳目</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ PART 5 ══════════════════════════════════════ -->
+  <section id="part5">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2>工作流程：PDF 發票 / 收據資料提取</h2>
+    </div>
+
+    <div class="info-box yellow">
+      <div class="icon">📌</div>
+      <div>
+        <strong>適用場景</strong>
+        <p>收到 PDF 或圖像格式的發票、收據，需要將關鍵資訊整理成 Excel 或記錄表格。</p>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-circle">1</div>
+        <div class="step-body">
+          <h4>準備 PDF / 圖像文件</h4>
+          <p>確保文件清晰可讀。如果是掃描件，分辨率至少 200 DPI 以上。</p>
+          <ul>
+            <li>可以直接上傳 PDF 給 AutoClaw</li>
+            <li>或把 PDF 文字複製出來，以文字方式提供</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-circle">2</div>
+        <div class="step-body">
+          <h4>說明你需要的欄位</h4>
+          <p>告訴 AutoClaw 要提取哪些資訊，例如：</p>
+          <div style="background:var(--gray-100); border-radius:8px; padding:12px; margin-top:8px; font-size:13px; font-family:monospace;">
+            供應商名稱 / 發票號碼 / 發票日期 / 項目描述 / 金額 / 稅額 / 總計
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-circle">3</div>
+        <div class="step-body">
+          <h4>使用提取 Prompt 模板</h4>
+          <p>使用第 6 部分的「PDF 發票提取」模板，指定輸出格式（表格 / CSV / 列點）。</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-circle">4</div>
+        <div class="step-body">
+          <h4>核對並複製到你的記錄表</h4>
+          <p>收到 AI 結果後：</p>
+          <ul>
+            <li>對照原始文件逐行核對金額和日期</li>
+            <li>留意 AI 可能把英式日期（5 Jan 2024）和數字日期（5/1/2024）混淆</li>
+            <li>確認無誤後才複製到正式記錄表</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>常見問題</th>
+          <th>原因</th>
+          <th>處理方法</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>日期格式錯誤</td>
+          <td>AI 混淆 DD/MM 和 MM/DD</td>
+          <td>在 Prompt 中指定「日期格式為 DD/MM/YYYY」</td>
+        </tr>
+        <tr>
+          <td>金額少了小數位</td>
+          <td>掃描件模糊</td>
+          <td>提供更高清版本或手動輸入原文</td>
+        </tr>
+        <tr>
+          <td>中英文混排識別錯</td>
+          <td>發票有中英混合文字</td>
+          <td>要求 AI「如不確定請標注？讓我確認」</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ══════════════════════════════════════ PART 6 ══════════════════════════════════════ -->
+  <section id="part6">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <h2>試驗計劃：入數紙 Flow 怎麼有計劃地試</h2>
+    </div>
+
+    <div class="info-box blue">
+      <div class="icon">🧪</div>
+      <div>
+        <strong>試驗的目的不是一次成功，是找清楚問題在哪</strong>
+        <p>每輪試驗都有明確目標。先找到 AI 在哪裡失手、為什麼，才能決定怎樣改 Prompt 或改流程。不要跳過這個過程直接做真實工作。</p>
+      </div>
+    </div>
+
+    <!-- Round 0 -->
+    <div class="card" style="margin-bottom:20px;">
+      <h3 style="color:var(--primary);">準備工作：建立測試素材包</h3>
+      <p style="font-size:13px; color:var(--gray-600); margin-bottom:12px;">在任何人開始試之前，先準備好這套測試材料。這樣大家試完才有東西比較。</p>
+      <ul style="font-size:13px; color:var(--gray-600); padding-left:18px;">
+        <li>收集 <strong>10 張真實入數紙</strong>（已處理過的舊記錄，知道正確答案）</li>
+        <li>涵蓋範圍：至少 3 間不同銀行、至少 2 張質素一般（手機拍）、至少 1 張很清晰的 PDF</li>
+        <li>整理一份「正確答案表」：每張入數紙的正確日期、金額、參考號</li>
+        <li>準備對應的 Excel 帳目片段（含部分配對、部分差異、部分缺失）</li>
+      </ul>
+      <div class="info-box yellow" style="margin-top:12px; margin-bottom:0;">
+        <div class="icon">⚠️</div>
+        <div><p style="font-size:13px;">有了「正確答案表」，試完才知道 AI 對了幾個、錯在哪。沒有這一步，試驗結果沒意義。</p></div>
+      </div>
+    </div>
+
+    <!-- Round 1 -->
+    <div class="card" style="border-left: 4px solid var(--primary); margin-bottom:20px;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+        <div style="background:var(--primary); color:#fff; border-radius:20px; padding:3px 12px; font-size:12px; font-weight:700;">第一輪</div>
+        <h3 style="margin-bottom:0;">單張探索 — 找出 AI 在哪裡失手</h3>
+      </div>
+      <p style="font-size:13px; color:var(--gray-600); margin-bottom:10px;"><strong>目標：</strong>了解 AI 的能力邊界，不是做完所有對帳。每次只上傳 1 張，用模板一A提取，對照正確答案表記錄結果。</p>
+
+      <p style="font-size:13px; font-weight:600; margin-bottom:8px;">每張入數紙試完後，填入以下記錄表：</p>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>銀行</th>
+            <th>圖像質素</th>
+            <th>日期正確？</th>
+            <th>金額正確？</th>
+            <th>參考號正確？</th>
+            <th>AI 有標「?」嗎？</th>
+            <th>備注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="color:var(--gray-400); font-style:italic;">
+            <td>1</td>
+            <td>例：匯豐</td>
+            <td>清晰 PDF</td>
+            <td>✅</td>
+            <td>✅</td>
+            <td>✅</td>
+            <td>沒有</td>
+            <td></td>
+          </tr>
+          <tr style="color:var(--gray-400); font-style:italic;">
+            <td>2</td>
+            <td>例：恆生</td>
+            <td>手機照，偏暗</td>
+            <td>❌ 月日倒轉</td>
+            <td>✅</td>
+            <td>⚠️ 填了?</td>
+            <td>有，參考號</td>
+            <td>圖像太暗</td>
+          </tr>
+          <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-box green" style="margin-top:8px; margin-bottom:0;">
+        <div class="icon">💡</div>
+        <div><p style="font-size:13px;">第一輪的目的是<strong>找問題</strong>，遇到 AI 出錯是正常的，不是你的失敗。填好記錄表，帶去 Review Session。</p></div>
+      </div>
+    </div>
+
+    <!-- Review Session -->
+    <div class="card" style="border-left: 4px solid var(--warning); background:var(--warning-light); margin-bottom:20px;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+        <div style="background:var(--warning); color:#fff; border-radius:20px; padding:3px 12px; font-size:12px; font-weight:700;">Review Session</div>
+        <h3 style="margin-bottom:0;">大家一起分析問題（約 30 分鐘）</h3>
+      </div>
+      <p style="font-size:13px; color:var(--gray-600); margin-bottom:10px;">收集所有人的記錄表，一起回顧。重點問這三條問題：</p>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+        <div style="background:#fff; border-radius:8px; padding:14px;">
+          <div style="font-size:18px; margin-bottom:6px;">🔍</div>
+          <h4 style="font-size:13px; font-weight:700; margin-bottom:4px;">問題是什麼？</h4>
+          <p style="font-size:12px; color:var(--gray-600);">哪個欄位最多錯？日期？金額？參考號？哪間銀行格式問題最多？</p>
+        </div>
+        <div style="background:#fff; border-radius:8px; padding:14px;">
+          <div style="font-size:18px; margin-bottom:6px;">🤔</div>
+          <h4 style="font-size:13px; font-weight:700; margin-bottom:4px;">是 Prompt 問題還是圖像問題？</h4>
+          <p style="font-size:12px; color:var(--gray-600);">如果圖像清晰但 AI 也出錯 → Prompt 需要改。如果圖像模糊才出錯 → 這是圖像質素問題，Prompt 無法解決。</p>
+        </div>
+        <div style="background:#fff; border-radius:8px; padding:14px;">
+          <div style="font-size:18px; margin-bottom:6px;">🛠️</div>
+          <h4 style="font-size:13px; font-weight:700; margin-bottom:4px;">我們可以控制什麼？</h4>
+          <p style="font-size:12px; color:var(--gray-600);">可以改 Prompt、可以要求學生提交更清晰的圖像。不能控制的：AI 本身的識別上限。</p>
+        </div>
+      </div>
+
+      <p style="font-size:13px; color:var(--gray-600); margin-top:12px; margin-bottom:6px;"><strong>常見問題對應做法：</strong></p>
+      <table style="margin-bottom:0;">
+        <thead><tr><th>發現問題</th><th>大概原因</th><th>處理方向</th></tr></thead>
+        <tbody>
+          <tr><td>日期月日倒轉</td><td>Prompt 沒說清楚日期格式</td><td>在 Prompt 加：「香港銀行入數紙日期格式為 DD/MM/YYYY」</td></tr>
+          <tr><td>AI 把手續費當存款金額</td><td>Prompt 沒說明哪個才是存款金額</td><td>在 Prompt 加：「只提取存款/存入金額，忽略手續費欄位」</td></tr>
+          <tr><td>參考號每次都填「?」</td><td>圖像太小或格式特殊</td><td>考慮是否需要參考號，或改為可選欄位</td></tr>
+          <tr><td>模糊圖像根本讀不到</td><td>圖像質素問題，非 Prompt 問題</td><td>設定學生提交要求：最低清晰度標準</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Round 2 -->
+    <div class="card" style="border-left: 4px solid var(--accent); margin-bottom:20px;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+        <div style="background:var(--accent); color:#fff; border-radius:20px; padding:3px 12px; font-size:12px; font-weight:700;">第二輪</div>
+        <h3 style="margin-bottom:0;">優化後重試 — 驗證改動有沒有效</h3>
+      </div>
+      <p style="font-size:13px; color:var(--gray-600); margin-bottom:10px;"><strong>目標：</strong>用修改後的 Prompt，重新測試第一輪出錯的 case，看看有沒有改善。同時測試批量（3-5 張一起上傳）。</p>
+      <ul style="font-size:13px; color:var(--gray-600); padding-left:18px;">
+        <li>先重試第一輪的失敗 case（用同一張圖 + 新 Prompt）</li>
+        <li>如果修好了 → Prompt 改動有效 ✅</li>
+        <li>如果沒修好 → 可能是圖像問題，或需要再調整 Prompt</li>
+        <li>成功後，嘗試一次上傳 3-5 張，看 AI 能否分清楚哪張是哪張</li>
+      </ul>
+      <div class="info-box blue" style="margin-top:10px; margin-bottom:0;">
+        <div class="icon">⚠️</div>
+        <div><p style="font-size:13px;">每次只改一個地方，才知道是哪個改動起了作用。同時改多個，遇到問題就不知道是哪裡出錯。</p></div>
+      </div>
+    </div>
+
+    <!-- Round 3 -->
+    <div class="card" style="border-left: 4px solid var(--success); margin-bottom:20px;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+        <div style="background:var(--success); color:#fff; border-radius:20px; padding:3px 12px; font-size:12px; font-weight:700;">第三輪</div>
+        <h3 style="margin-bottom:0;">全流程計時 — 判斷是否值得正式使用</h3>
+      </div>
+      <p style="font-size:13px; color:var(--gray-600); margin-bottom:10px;"><strong>目標：</strong>跑一次完整流程（提取 → 核對 → 對帳），計時，量化「比人手快多少」。</p>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+        <div style="background:var(--gray-50); border-radius:8px; padding:14px;">
+          <h4 style="font-size:13px; font-weight:700; margin-bottom:8px;">計時項目</h4>
+          <ul style="font-size:12px; color:var(--gray-600); padding-left:16px;">
+            <li>上傳 10 張入數紙 + 等 AI 提取：＿＿ 分鐘</li>
+            <li>核對提取結果（人工核對）：＿＿ 分鐘</li>
+            <li>修正 AI 錯誤：＿＿ 分鐘</li>
+            <li>執行對帳 Prompt：＿＿ 分鐘</li>
+            <li>核對對帳結果：＿＿ 分鐘</li>
+            <li><strong>總計：＿＿ 分鐘</strong></li>
+          </ul>
+        </div>
+        <div style="background:var(--gray-50); border-radius:8px; padding:14px;">
+          <h4 style="font-size:13px; font-weight:700; margin-bottom:8px;">Go / No-Go 標準</h4>
+          <ul style="font-size:12px; color:var(--gray-600); padding-left:16px;">
+            <li>清晰圖像提取準確率 &gt; 90% → ✅</li>
+            <li>AI 出錯時有標注「?」而非自信地填錯 → ✅</li>
+            <li>全流程比純人手快 &gt; 30% → ✅</li>
+            <li>同事覺得流程可以接受 → ✅</li>
+          </ul>
+          <p style="font-size:12px; color:var(--gray-600); margin-top:8px;">四項都達到才建議正式使用。否則回到 Review Session 再優化。</p>
+        </div>
+      </div>
+    </div>
+
+  <!-- ══════════════════════════════════════ PART 7 ══════════════════════════════════════ -->
+  </section>
+  <section id="part7">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <h2>Prompt 範本庫</h2>
+    </div>
+
+    <p style="font-size:14px; color:var(--gray-600); margin-bottom:20px;">
+      以下模板可以直接複製。<span style="color:var(--warning); font-weight:600;">黃色文字</span>為佔位符，使用前替換成你的實際資料。
+    </p>
+
+    <h3 style="font-size:15px; font-weight:600; margin:24px 0 12px;">📋 模板一A：從入數紙圖像提取資料（第一步）</h3>
+    <div class="prompt-block">
+      <div class="prompt-block-header">
+        <span class="title">入數紙提取（上傳圖像後使用）</span>
+        <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
+      </div>
+      <pre>我已上傳了 <span class="placeholder">[張數]</span> 張學生提交的入數紙（PDF / 圖像截圖）。
+
+請從每張入數紙中提取以下資訊，整理成表格：
+- 序號（按圖像順序）
+- 存款日期（格式：DD/MM/YYYY）
+- 存款金額（港元，保留兩位小數）
+- 銀行參考號 / 交易編號（如有）
+- 備注（如有特別說明）
+
+如某欄位不清晰或無法辨認，請填「?」並說明原因。
+請勿自行猜測或補全任何數字。</pre>
+    </div>
+
+    <h3 style="font-size:15px; font-weight:600; margin:24px 0 12px;">📋 模板一B：核對提取結果與帳目（第二步）</h3>
+    <div class="prompt-block">
+      <div class="prompt-block-header">
+        <span class="title">入數紙對帳（提取完成後使用）</span>
+        <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
+      </div>
+      <pre>以下是你剛才提取的入數紙記錄，以及我的 Excel 帳目記錄，請幫我核對兩份資料的差異。
+
+【入數紙提取結果】
+<span class="placeholder">（直接引用上一步 AI 輸出的表格，或貼上修正後的版本）</span>
+
+【Excel 帳目記錄】
+<span class="placeholder">[貼上 Excel 對應期間的記錄，例如：
+03/01/2024 | $5,200.00 | DEP-001
+05/01/2024 | $4,000.00 | DEP-002]</span>
+
+請按以下格式輸出對帳結果：
+1. ✅ 已配對（日期 + 金額完全一致）
+2. ❌ 金額差異（列出兩方金額及差額）
+3. ⚠️ 無法配對（只在其中一方出現，請列出是哪一方）
+
+最後列出總結：共幾筆配對、幾筆有差異、幾筆無法配對。</pre>
+    </div>
+
+    <h3 style="font-size:15px; font-weight:600; margin:24px 0 12px;">🧾 模板二：PDF 發票資料提取</h3>
+    <div class="prompt-block">
+      <div class="prompt-block-header">
+        <span class="title">PDF 發票提取</span>
+        <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
+      </div>
+      <pre>請從以下發票內容中提取資料，以表格格式輸出。
+
+【發票內容】
+<span class="placeholder">[貼上發票的文字內容，或上傳 PDF 附件]</span>
+
+請提取以下欄位：
+- 供應商名稱
+- 發票號碼
+- 發票日期（格式：DD/MM/YYYY）
+- 項目描述
+- 金額（港元，保留兩位小數）
+- 稅額（如有）
+- 發票總額
+
+如有任何欄位不清晰或無法確認，請在該格填「?」並說明原因。</pre>
+    </div>
+
+    <h3 style="font-size:15px; font-weight:600; margin:24px 0 12px;">📄 模板三：批量收據整理</h3>
+    <div class="prompt-block">
+      <div class="prompt-block-header">
+        <span class="title">批量收據整理</span>
+        <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
+      </div>
+      <pre>以下是 <span class="placeholder">[數量]</span> 張收據的資料，請整理成一份表格。
+
+【收據資料】
+<span class="placeholder">[逐一貼上每張收據的文字，用「---」分隔]</span>
+
+---
+
+請輸出 CSV 格式的表格，欄位如下：
+序號 | 日期 | 供應商 | 金額(HKD) | 類別 | 備注
+
+日期格式統一為 DD/MM/YYYY。
+如某張收據有資訊缺失，對應格填「-」。</pre>
+    </div>
+
+    <h3 style="font-size:15px; font-weight:600; margin:24px 0 12px;">✉️ 模板四：草擬跟進電郵</h3>
+    <div class="prompt-block">
+      <div class="prompt-block-header">
+        <span class="title">草擬跟進電郵</span>
+        <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
+      </div>
+      <pre>請幫我草擬一封商業電郵，語氣專業禮貌。
+
+背景：<span class="placeholder">[描述情況，例如：供應商 XYZ Ltd 的發票 INV-2024-089 金額有出入，需要向對方查詢]</span>
+
+電郵需要包含：
+- 清楚說明問題
+- 要求對方提供更正發票或解釋
+- 請對方在 <span class="placeholder">[日期]</span> 前回覆
+
+語言：<span class="placeholder">[中文 / 英文]</span>
+收件人稱呼：<span class="placeholder">[對方姓名/稱謂]</span></pre>
+    </div>
+
+    <h3 style="font-size:15px; font-weight:600; margin:24px 0 12px;">📊 模板五：Excel 公式協助</h3>
+    <div class="prompt-block">
+      <div class="prompt-block-header">
+        <span class="title">Excel 公式協助</span>
+        <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
+      </div>
+      <pre>我的 Excel 有以下結構：
+
+<span class="placeholder">[描述你的 Excel 欄位，例如：
+A欄：日期
+B欄：收入金額
+C欄：支出金額
+D欄：結餘（需要公式）]</span>
+
+我需要：<span class="placeholder">[描述你想達成的效果，例如：D欄自動計算每行的累計結餘]</span>
+
+請提供適用的 Excel 公式，並說明如何使用。</pre>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ PART 8 ══════════════════════════════════════ -->
+  <section id="part8">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <h2>常見問題 &amp; 注意事項</h2>
+    </div>
+
+    <div class="info-box red">
+      <div class="icon">🔒</div>
+      <div>
+        <strong>資料私隱重要提示</strong>
+        <p>AutoClaw 的對話內容會傳送到雲端伺服器處理。<strong>請勿輸入</strong>：客戶全名 + 完整帳戶號碼組合、身份證號碼、公司未公開財務數字。處理敏感資料前，請將識別資訊匿名化。</p>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          AI 給出的數字有誤差，怎麼辦？
+          <span class="arrow">▶</span>
+        </button>
+        <div class="faq-a">
+          <p>先不要直接使用。請對照原始文件重新核對，然後告訴 AI「你提取的金額是 $X，但原文顯示 $Y，請重新確認」。如果多次嘗試仍有問題，請手動輸入正確數字，並在備注欄記錄「AI 結果已人工修正」。</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          AutoClaw 說「我無法處理這個文件」怎麼辦？
+          <span class="arrow">▶</span>
+        </button>
+        <div class="faq-a">
+          <p>常見原因：PDF 是掃描圖像（非文字型），或文件格式受保護。解決方法：① 嘗試把 PDF 文字手動複製出來再貼入；② 如是圖像 PDF，先用 OCR 工具（如 Adobe Acrobat）轉換成文字；③ 聯絡 IT 部門協助。</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          積分用完了怎麼辦？
+          <span class="arrow">▶</span>
+        </button>
+        <div class="faq-a">
+          <p>積分由公司統一管理。用完後請直接聯絡 <strong>IT 部門</strong>申請補充，無需自行購買。</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          同一個 Prompt 模板，每次結果都不一樣？
+          <span class="arrow">▶</span>
+        </button>
+        <div class="faq-a">
+          <p>這是 AI 語言模型的正常特性（具有一定隨機性）。解決方法：① 在 Prompt 結尾加上「請嚴格按照我提供的資料輸出，不要添加或猜測任何資訊」；② 如結果差異很大，說明原始資料本身可能不清晰，需要人工確認。</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          什麼情況下應該找人幫忙，而不是繼續問 AI？
+          <span class="arrow">▶</span>
+        </button>
+        <div class="faq-a">
+          <p>以下情況請找部門負責人或同事：① 金額差異超過 $500 且無法解釋；② 同一文件 AI 給出 3 次不同結果；③ 文件涉及法律或審計事宜；④ 你不確定 AI 的回答是否正確，但又必須做決定。<strong>AI 是助手，最終判斷由人做。</strong></p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          可以用 AutoClaw 直接修改公司系統的資料嗎？
+          <span class="arrow">▶</span>
+        </button>
+        <div class="faq-a">
+          <p>不可以。AutoClaw 目前只用於輔助資料整理和分析，不直接連接公司 ERP 或帳目系統。所有結果核對無誤後，由你自行手動輸入或複製到正式系統。</p>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <h3 style="font-size:15px; font-weight:600; margin-bottom:12px;">快速參考：AI 結果可信度評估</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>情況</th>
+          <th>可信度</th>
+          <th>建議</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>AI 直接從清晰文字提取，無推斷</td>
+          <td><span class="tag green">高</span></td>
+          <td>抽查 20% 核對即可</td>
+        </tr>
+        <tr>
+          <td>AI 從模糊掃描件提取</td>
+          <td><span class="tag" style="background:#fef3c7;color:#b45309;">中</span></td>
+          <td>逐行核對，特別是數字</td>
+        </tr>
+        <tr>
+          <td>AI 作出推斷或「補全」資料</td>
+          <td><span class="tag red">低</span></td>
+          <td>必須對照原始文件全部核對</td>
+        </tr>
+        <tr>
+          <td>AI 主動標注「請確認」</td>
+          <td><span class="tag red">低</span></td>
+          <td>這些項目必須人工確認</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div><!-- /container -->
+
+<footer>
+  會計部 AutoClaw 上手指南 · 如有任何問題請聯絡部門負責人 · 版本 1.0
+</footer>
+
+<script>
+  function copyPrompt(btn) {
+    const pre = btn.closest('.prompt-block').querySelector('pre');
+    const text = pre.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '已複製 ✓';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = '複製';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // Smooth scroll for nav links
+  document.querySelectorAll('nav a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+
+</body>
+</html>
